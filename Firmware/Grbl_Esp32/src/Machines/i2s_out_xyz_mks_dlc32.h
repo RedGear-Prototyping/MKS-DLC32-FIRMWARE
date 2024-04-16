@@ -103,18 +103,18 @@
 #define PROBE_PIN                   GPIO_NUM_2    
 #endif
 
-#define LCD_SCK				        GPIO_NUM_18
-#define LCD_MISO				    GPIO_NUM_19
-#define LCD_MOSI				    GPIO_NUM_23
-#define LCD_RS					    GPIO_NUM_33
-#define LCD_EN					    GPIO_NUM_5     
-#define LCD_RST					    GPIO_NUM_27     
-#define LCD_CS					    GPIO_NUM_25
-#define TOUCH_CS				    GPIO_NUM_26
+#define LCD_SCK				        NULL //GPIO_NUM_18
+#define LCD_MISO				    NULL //GPIO_NUM_19
+#define LCD_MOSI				    NULL //GPIO_NUM_23
+#define LCD_RS					    NULL //GPIO_NUM_33
+#define LCD_EN					    NULL //GPIO_NUM_5     
+#define LCD_RST					    NULL //GPIO_NUM_27     
+#define LCD_CS					    NULL //GPIO_NUM_25
+#define TOUCH_CS				    NULL //GPIO_NUM_26
 #define BEEPER					    I2SO(7)
 
-#define IIC_SCL                     GPIO_NUM_4
-#define IIC_SDA                     GPIO_NUM_0
+#define IIC_SCL                     NULL //GPIO_NUM_4
+#define IIC_SDA                     NULL //GPIO_NUM_0
 
 #define COOLANT_FLOOD_PIN           IIC_SCL
 

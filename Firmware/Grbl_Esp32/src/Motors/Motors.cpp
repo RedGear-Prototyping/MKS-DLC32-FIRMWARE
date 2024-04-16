@@ -498,6 +498,23 @@ bool motors_direction(uint8_t dir_mask) {
     }
 }
 
+void motors_direct_step_z(bool dir)
+{
+
+        if(sys.state == State::Cycle)
+        {
+                //bool last_dir = motors_direction(0x4);
+                for(uint8_t n = 0; n < 160; n++)
+                {
+                        myMotor[2][0]->set_direction(dir);
+                        myMotor[2][0]->step();
+                        //delay(1);
+                        delayMicroseconds(100);
+                } 
+                //myMotor[2][0]->set_direction(last_dir);
+        }
+}
+
 void motors_step(uint8_t step_mask) {
     auto n_axis = number_axis->get();
     //grbl_msg_sendf(CLIENT_SERIAL, MsgLevel::Info, "motors_set_direction_pins:0x%02X", onMask);

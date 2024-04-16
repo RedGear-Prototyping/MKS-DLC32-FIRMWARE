@@ -47,9 +47,9 @@
 #define SPINDLE_OUTPUT_PIN      GPIO_NUM_2   // labeled SpinPWM
 #define SPINDLE_ENABLE_PIN      GPIO_NUM_22  // labeled SpinEnbl
 
-#define COOLANT_MIST_PIN        GPIO_NUM_21  // labeled Mist
-#define COOLANT_FLOOD_PIN       GPIO_NUM_25  // labeled Flood
-#define PROBE_PIN               GPIO_NUM_32  // labeled Probe
+//#define COOLANT_MIST_PIN        GPIO_NUM_21  // labeled Mist
+//#define COOLANT_FLOOD_PIN       GPIO_NUM_25  // labeled Flood
+//#define PROBE_PIN               GPIO_NUM_32  // labeled Probe
 
 
 /*

@@ -37,6 +37,7 @@ typedef struct {
     int32_t position[MAX_N_AXIS];  // The planner position of the tool in absolute steps. Kept separate
     // from g-code position for movements requiring multiple line motions,
     // i.e. arcs, canned cycles, and backlash compensation.
+    int32_t previous_position[MAX_N_AXIS];
     float previous_unit_vec[MAX_N_AXIS];  // Unit vector of previous path line segment
     float previous_nominal_speed;         // Nominal speed of previous path line segment
 } planner_t;
@@ -125,7 +126,7 @@ static uint8_t plan_prev_block_index(uint8_t block_index) {
   ARM versions should have enough memory and speed for look-ahead blocks numbering up to a hundred or more.
 
 */
-static void planner_recalculate() {
+/*static*/ void planner_recalculate() {
     // Initialize block index to the last block in the planner buffer.
     uint8_t block_index = plan_prev_block_index(block_buffer_head);
     // Bail. Can't do anything with one only one plan-able block.
@@ -295,6 +296,27 @@ void plan_update_velocity_profile_parameters() {
     pl.previous_nominal_speed = prev_nominal_speed;  // Update prev nominal speed for next incoming block.
 }
 
+
+// Re-calculates buffered motions profile parameters upon a motion-based override change.
+void plan_update_z_override(float increment) {
+    const uint8_t z_axis = 2;
+    uint8_t       block_index = block_buffer_tail;
+    plan_block_t* block;
+
+    while (block_index != block_buffer_head) {
+        block                   = &block_buffer[block_index];
+
+        if(increment < 0){
+            block->direction_bits |= (1 << z_axis);
+        }else{
+            block->direction_bits &= ~(1 << z_axis);
+        }
+        block->steps[z_axis]   +=  abs(increment * 35);//lround(increment * axis_settings[2]->steps_per_mm->get())
+        block->step_event_count = MAX(block->step_event_count, block->steps[z_axis]);
+        block_index        = plan_next_block_index(block_index);
+    }
+}
+
 uint8_t plan_buffer_line(float* target, plan_line_data_t* pl_data) {
     // Prepare and initialize new block. Copy relevant pl_data for block execution.
     plan_block_t* block = &block_buffer[block_buffer_head];
@@ -318,16 +340,20 @@ uint8_t plan_buffer_line(float* target, plan_line_data_t* pl_data) {
         memcpy(position_steps, pl.position, sizeof(pl.position));
     }
     auto n_axis = number_axis->get();
+
+
     for (idx = 0; idx < n_axis; idx++) {
         // Calculate target position in absolute steps, number of steps for each axis, and determine max step events.
         // Also, compute individual axes distance for move and prep unit vector calculations.
         // NOTE: Computes true distance from converted step values.
+    
         target_steps[idx]       = lround(target[idx] * axis_settings[idx]->steps_per_mm->get());
         block->steps[idx]       = labs(target_steps[idx] - position_steps[idx]);
         block->step_event_count = MAX(block->step_event_count, block->steps[idx]);
         delta_mm                = (target_steps[idx] - position_steps[idx]) / axis_settings[idx]->steps_per_mm->get();
         unit_vec[idx]           = delta_mm;  // Store unit vector numerator
         // Set direction bits. Bit enabled always means direction is negative.
+
         if (delta_mm < 0.0) {
             block->direction_bits |= bit(idx);
         }
@@ -430,7 +456,8 @@ void plan_sync_position() {
     auto    n_axis = number_axis->get();
     for (idx = 0; idx < n_axis; idx++) {
         pl.position[idx] = sys_position[idx];
-    }
+        
+    }   
 }
 
 // Returns the number of available blocks are in the planner buffer.

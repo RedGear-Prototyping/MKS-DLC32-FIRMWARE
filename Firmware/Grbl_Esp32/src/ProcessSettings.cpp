@@ -113,7 +113,7 @@ Error show_grbl_help(const char* value, WebUI::AuthenticationLevel auth_level, W
 
 Error report_gcode(const char* value, WebUI::AuthenticationLevel auth_level, WebUI::ESPResponseStream* out) {
     report_gcode_modes(out->client());
-    return Error::Ok;
+    return Error::Nothing; 
 }
 
 void show_grbl_settings(WebUI::ESPResponseStream* out, type_t type, bool wantAxis) {

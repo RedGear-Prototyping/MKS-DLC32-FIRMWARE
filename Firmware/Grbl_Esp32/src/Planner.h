@@ -131,6 +131,10 @@ void plan_sync_position();
 // Reinitialize plan with a partially completed block
 void plan_cycle_reinitialize();
 
+void planner_recalculate();
+
+void plan_update_z_override(float increment);
+
 // Returns the number of available blocks are in the planner buffer.
 uint8_t plan_get_block_buffer_available();
 

@@ -32,6 +32,10 @@
 #    define M_PI 3.14159265358979323846
 #endif
 
+//volatile float Z_Override_Increment = 0.00;
+//volatile float Z_Override_Offset = 0.00;
+
+
 SquaringMode ganged_mode = SquaringMode::Dual;
 
 // Execute linear motion in absolute millimeter coordinates. Feed rate given in millimeters/second
@@ -43,6 +47,8 @@ SquaringMode ganged_mode = SquaringMode::Dual;
 // in the planner and to let backlash compensation or canned cycle integration simple and direct.
 // returns true if line was submitted to planner, or false if intentionally dropped.
 bool mc_line(float* target, plan_line_data_t* pl_data) {
+
+
     bool submitted_result = false;
     // store the plan data so it can be cancelled by the protocol system if needed
     sys_pl_data_inflight = pl_data;
@@ -63,6 +69,7 @@ bool mc_line(float* target, plan_line_data_t* pl_data) {
         sys_pl_data_inflight = NULL;
         return submitted_result;
     }
+
     // NOTE: Backlash compensation may be installed here. It will need direction info to track when
     // to insert a backlash line motion(s) before the intended line motion and will require its own
     // plan_check_full_buffer() and check for system abort loop. Also for position reporting
@@ -93,6 +100,7 @@ bool mc_line(float* target, plan_line_data_t* pl_data) {
     // Plan and queue motion into planner buffer
     // uint8_t plan_status; // Not used in normal operation.
     if (sys_pl_data_inflight == pl_data) {
+
         plan_buffer_line(target, pl_data);
         submitted_result = true;
     }

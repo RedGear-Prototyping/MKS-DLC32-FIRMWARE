@@ -88,7 +88,7 @@ namespace Spindles {
                 spindle = &null;
                 break;
         }
-
+        spindle = &relay;
         spindle->init();
     }
 

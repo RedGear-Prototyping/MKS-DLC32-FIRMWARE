@@ -28,6 +28,7 @@
 #include "mks/MKS_draw_print.h"
 #include "mks/MKS_draw_wifi.h"
 
+
 static void protocol_exec_rt_suspend();
 
 static char    line[LINE_BUFFER_SIZE];     // Line to be executed. Zero-terminated.
@@ -153,6 +154,7 @@ void protocol_main_loop() {
     int c;
     bool is_need_next = false;
     for (;;) {
+
 #if 1
 #ifdef ENABLE_SD_CARD
         if (SD_ready_next) {

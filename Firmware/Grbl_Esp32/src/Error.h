@@ -85,6 +85,7 @@ enum class Error : uint8_t {
     Eol                         = 111,
     AnotherInterfaceBusy        = 120,
     JogCancelled                = 130,
+    Nothing                     = 255,
 };
 
 extern std::map<Error, const char*> ErrorNames;

@@ -56,13 +56,19 @@
 */
 
 #include "Grbl.h"
+#include "planner.h"
+
+
 // #include "mks/lcd_serial.h"
+//plan_block_t pl;
 
 // Define this to use the Arduino serial (UART) driver instead
 // of the one in Uart.cpp, which uses the ESP-IDF UART driver.
 // This is for regression testing, and can be removed after
 // testing is complete.
 // #define REVERT_TO_ARDUINO_SERIAL
+
+
 
 portMUX_TYPE myMutex = portMUX_INITIALIZER_UNLOCKED;
 
@@ -108,7 +114,7 @@ void client_init() {
     client_reset_read_buffer(CLIENT_ALL);
     Serial.write("\r\n");  // create some white space after ESP32 boot info
 #else
-    Uart0.setPins(1, 3);  // Tx 1, Rx 3 - standard hardware pins
+    Uart0.setPins(0, 4);  // Tx 1, Rx 3 - standard hardware pins
     Uart0.begin(BAUD_RATE, Uart::Data::Bits8, Uart::Stop::Bits1, Uart::Parity::None);
 
     client_reset_read_buffer(CLIENT_ALL);
@@ -347,6 +353,20 @@ void execute_realtime_command(Cmd command, uint8_t client) {
             break;
         case Cmd::CoolantMistOvrToggle:
             sys_rt_exec_accessory_override.bit.coolantMistOvrToggle = 1;
+            break;
+        case Cmd::ZOverrideReset:
+            
+            break;
+        case Cmd::ZOverridePlus:         
+            motors_direct_step_z(0);
+
+            //plan_update_z_override(+0.1);
+            break;
+        case Cmd::ZOverrideMinus:
+            motors_direct_step_z(1);
+
+            //plan_update_z_override(-0.1);
+
             break;
     }
 }
