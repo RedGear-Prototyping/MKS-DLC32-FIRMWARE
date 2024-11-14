@@ -504,17 +504,37 @@ void motors_direct_step_z(bool dir)
         if(sys.state == State::Cycle)
         {
                 //bool last_dir = motors_direction(0x4);
-                for(uint8_t n = 0; n < 40; n++)
-                {
-                        
+
+                for(uint8_t n = 0; n < 10; n++)
+                {   
                         if(gc_state.modal.spindle == SpindleState::Cw)
                         {
                                 myMotor[2][0]->set_direction(dir);
                                 myMotor[2][0]->step();
-                                //delay(1);
+                                delayMicroseconds(900 - (n * 60));
+                        }
+                }
+
+                for(uint8_t n = 0; n < 20; n++)
+                {   
+                        if(gc_state.modal.spindle == SpindleState::Cw)
+                        {
+                                myMotor[2][0]->set_direction(dir);
+                                myMotor[2][0]->step();
                                 delayMicroseconds(300);
                         }
                 }
+
+                for(uint8_t n = 0; n < 10; n++)
+                {   
+                        if(gc_state.modal.spindle == SpindleState::Cw)
+                        {
+                                myMotor[2][0]->set_direction(dir);
+                                myMotor[2][0]->step();
+                                delayMicroseconds(300 + n * 60);
+                        }
+                }
+
                 myMotor[2][0]->set_direction(0);
                 //myMotor[2][0]->set_direction(last_dir);
         }

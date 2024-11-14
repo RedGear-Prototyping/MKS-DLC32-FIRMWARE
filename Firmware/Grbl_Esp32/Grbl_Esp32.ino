@@ -22,6 +22,8 @@
 
 void setup() {
     grbl_init();
+    pinMode(X_THC_UP_PIN, INPUT_PULLUP);
+    pinMode(Y_THC_DOWN_PIN, INPUT_PULLUP);
 }
 
 void loop() {

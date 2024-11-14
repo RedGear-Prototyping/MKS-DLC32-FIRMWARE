@@ -83,15 +83,20 @@
 #endif
 
 // Laser pin set
-#define SPINDLE_TYPE                SpindleType::PWM 
+#define SPINDLE_TYPE                SpindleType::RELAY
 #ifdef USE_BOARD_V2_0
 #define SPINDLE_OUTPUT_PIN          GPIO_NUM_32
 #else 
 #define SPINDLE_OUTPUT_PIN          GPIO_NUM_22
 #endif
 
-#define X_LIMIT_PIN                 GPIO_NUM_36
-#define Y_LIMIT_PIN                 GPIO_NUM_35
+//#define X_LIMIT_PIN                 GPIO_NUM_36
+//#define Y_LIMIT_PIN                 GPIO_NUM_35
+
+#define X_THC_UP_PIN                GPIO_NUM_36
+#define Y_THC_DOWN_PIN              GPIO_NUM_35
+
+
 
 #if defined(USR_Z_MOTOR)
 #define Z_LIMIT_PIN                 GPIO_NUM_34
@@ -116,7 +121,7 @@
 #define IIC_SCL                     NULL //GPIO_NUM_4
 #define IIC_SDA                     NULL //GPIO_NUM_0
 
-#define COOLANT_FLOOD_PIN           IIC_SCL
+#define COOLANT_FLOOD_PIN           NULL //IIC_SCL
 
 //sd card spi
 #define GRBL_SPI_SCK 			    GPIO_NUM_14

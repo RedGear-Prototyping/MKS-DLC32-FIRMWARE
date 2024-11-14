@@ -114,7 +114,7 @@ void client_init() {
     client_reset_read_buffer(CLIENT_ALL);
     Serial.write("\r\n");  // create some white space after ESP32 boot info
 #else
-    Uart0.setPins(0, 4);  // Tx 1, Rx 3 - standard hardware pins
+    Uart0.setPins(0, 4);  // Tx 1, Rx 3 - standard hardware pins          (Aux 33,19)
     Uart0.begin(BAUD_RATE, Uart::Data::Bits8, Uart::Stop::Bits1, Uart::Parity::None);
 
     client_reset_read_buffer(CLIENT_ALL);
@@ -129,7 +129,7 @@ void client_init() {
                             "clientCheckTask",  // name for task
                             4096*2,               // size of task stack
                             NULL,               // parameters
-                            3,                  // priority
+                            3,                  // priority (3)
                             &clientCheckTaskHandle,
                             SUPPORT_TASK_CORE  // must run the task on same core
                                                // core
@@ -359,16 +359,25 @@ void execute_realtime_command(Cmd command, uint8_t client) {
             break;
         case Cmd::ZOverridePlus:         
             motors_direct_step_z(0);
-
             //plan_update_z_override(+0.1);
             break;
         case Cmd::ZOverrideMinus:
             motors_direct_step_z(1);
-
             //plan_update_z_override(-0.1);
-
             break;
     }
+
+    if(digitalRead(X_THC_UP_PIN) == 0)
+    {
+        motors_direct_step_z(0);
+        //plan_update_z_override(0.1);
+    }
+    if(digitalRead(Y_THC_DOWN_PIN) == 0)
+    {
+        motors_direct_step_z(1);
+        //plan_update_z_override(-0.1);
+    }
+
 }
 
 void client_write(uint8_t client, const char* text) {

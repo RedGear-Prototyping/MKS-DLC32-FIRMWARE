@@ -114,6 +114,7 @@ void protocol_main_loop() {
 
     client_reset_read_buffer(CLIENT_ALL);
     empty_lines();
+
     //uint8_t client = CLIENT_SERIAL; // default client
     // Perform some machine checks to make sure everything is good to go.
 #ifdef CHECK_LIMITS_AT_INIT
@@ -150,7 +151,7 @@ void protocol_main_loop() {
       MKS_GRBL_CMD_SEND(re_cmd);  
       first_restart = false; 
     }
-    
+
     int c;
     bool is_need_next = false;
     for (;;) {
